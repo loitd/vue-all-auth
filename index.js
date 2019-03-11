@@ -2,6 +2,7 @@
 // import ggButton from 'components/ggButton.vue'
 
 function installClient(){
+    // Installing client mean append client script to head (and make sure it loaded)
     console.log("installClient called");
     return new Promise(function(resolve, reject){
         // do something here
@@ -16,12 +17,58 @@ function installClient(){
 function initClient(config){
     console.log("initClient called");
     return new Promise(function(resolve, reject){
-        // do something
+        // do something. Do init as: https://developers.google.com/identity/sign-in/web/build-button
+        // By default, the fetch_basic_profile parameter of gapi.auth2.init() is set to true, which will automatically add 'email profile openid' as scope.
+        // Do not use the Google IDs returned by getId() or the user's profile information to communicate the currently signed in user to your backend server. 
+        // Instead, send ID tokens, which can be securely validated on the server.
         window.gapi.load("auth2", function(){
             auth2 = window.gapi.auth2.init(config);
         });
     });
 }
+
+// signIn function
+/* 
+    https://developers.google.com/identity/protocols/OAuth2
+    Server-side webapp # Javascript client side webapp: https://developers.google.com/identity/protocols/OAuth2UserAgent
+    This topo is for client side web app
+    Your App                        Google
+    ------------request token------------>
+    ------------user login & consent----->
+    <-----------token---------------------
+    ------------Validate token----------->
+    <-----------Validation response-------
+    ------------Use token to call API---->
+*/
+function signIn(successCallback, errorCallback){
+    // this step happen when all init and installation above done
+    // which mean all thing ready to be called
+    // // Sample token/code response: 4/-ABYX3-wfXTznLcS6prVHU5mqYbCsTvAbGKKtxw00k559VMVwLIC1Pt_L7Mmpt24bec3bJXpLH2MY1Eoh98Eg6g
+    window.gapi.auth2.getAuthInstance().signIn().then(function(googleUser){
+        // when success. Do anything you want
+        // You can send the authorizationCode to your backend server for further processing, 
+        // ex: redirect to the dashboard
+        // this.$router.push({ name: 'home' });
+        successCallback(googleUser)
+    }, function(error){
+        // things to do when sign-in fails
+        // Sample response: {error: "popup_closed_by_user"}
+        // Sample: Object error: "access_denied" __proto__:
+        errorCallback(error)
+    })
+
+}
+
+// signOut function
+function signOut(successCallback, errorCallback){
+    window.gapi.getAuthInstance().signOut().then(function(){
+        successCallback()
+    }, function(error){
+        errorCallback(error)
+    })
+}
+
+
 
 // This exports the plugin object.
 export default{
@@ -55,12 +102,21 @@ export default{
                     return new Promise(function(resolve, reject){
                         if (window.gapi === undefined){
                             // windows.gapi is not init
-                            console.log("gapi is not installed yet!");
-                            installClient();
+                            console.log("gapi is not installed yet! Now install");
+                            installClient().then(function(){
+                                // Installed, now init
+                                return initClient(options)
+                            }).then(function(){
+                                // Installed and inited -> resolved
+                                resolve()
+                            })
                         } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
                             // window.gapi is installed but auth2 is not init yet
-                            console.log("gapi is not init yet!")
-                            initClient(options);
+                            console.log("gapi installed but is not init yet! Now init!")
+                            initClient(options).then(function(){
+                                // init done. Resolved
+                                resolve()
+                            })
                         }
                     })
                 } //init function
