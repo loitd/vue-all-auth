@@ -18,4 +18,5 @@ import "./plugins/allauth";
 ```
 import VueAllAuth from "vue-all-auth";
 Vue.use(VueAllAuth, { client_id: "YOUR_CLIENT_ID.apps.googleusercontent.com" });
+Vue.allAuth().init();
 ```

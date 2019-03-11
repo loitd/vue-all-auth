@@ -3,6 +3,24 @@
 
 function installClient(){
     console.log("installClient called");
+    return new Promise(function(resolve, reject){
+        // do something here
+        let ggClientScript = document.createElement("script");
+        ggClientScript.setAttribute("src", "https://apis.google.com/js/api:client.js");
+        // Not handle connect timeout case yet
+        // Append the script onto the head element
+        document.head.appendChild(ggClientScript);
+    });
+}
+
+function initClient(config){
+    console.log("initClient called");
+    return new Promise(function(resolve, reject){
+        // do something
+        window.gapi.load("auth2", function(){
+            auth2 = window.gapi.auth2.init(config);
+        });
+    });
 }
 
 // This exports the plugin object.
@@ -42,6 +60,7 @@ export default{
                         } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
                             // window.gapi is installed but auth2 is not init yet
                             console.log("gapi is not init yet!")
+                            initClient(options);
                         }
                     })
                 } //init function
