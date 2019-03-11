@@ -119,7 +119,9 @@ export default{
                             })
                         }
                     })
-                } //init function
+                }, //init function
+                signIn: signIn,
+                signOut: signOut,
             }
         }
         console.log(options);
