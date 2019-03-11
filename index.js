@@ -6,12 +6,8 @@ export default{
     // https://dev.to/nkoik/writing-a-very-simple-plugin-in-vuejs---example-8g8
     // https://vuejs.org/v2/guide/plugins.html
     // The install method will be called with the Vue constructor as the first argument, along with possible options
-    // How to call - Without options
-    // Vue.use(yourPlugin)
-    // // With options
-    // Vue.use(yourPlugin, {
-    //     someOption: true
-    // })
+    // How to call - Without options Vue.use(yourPlugin)
+    // With options Vue.use(yourPlugin, {someOption: true})
     install (Vue, options){
         // Add a component or directive to your plugin, so it will be installed globally to your project.
         // Vue.component('ggButton', ggButton)
