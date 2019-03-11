@@ -134,6 +134,7 @@ export default{
                 }, //init function
                 signIn: signIn,
                 signOut: signOut,
+                printInfo: printInfo,
             }
         }
         console.log(options);
