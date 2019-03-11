@@ -68,6 +68,18 @@ function signOut(successCallback, errorCallback){
     })
 }
 
+// printInfo
+// https://developers.google.com/identity/sign-in/web/people
+function printInfo(googleUser){
+    if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
+        // Ok, you signed in
+        let profile = window.gapi.getAuthInstance().currentUser.get().getBasicProfile();
+        console.log("ID:"+profile.getID() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl())
+    } else {
+        console.log("Yes, you haven't logged in yet!")
+    }
+}
+
 
 
 // This exports the plugin object.
