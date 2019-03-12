@@ -1,5 +1,6 @@
 // plugin.js
 // import ggButton from 'components/ggButton.vue'
+// With google: based on this example https://github.com/google/google-api-javascript-client/blob/master/samples/authSample.html
 
 function installClient(){
     // Installing client mean append client script to head (and make sure it loaded)
@@ -61,7 +62,7 @@ function signIn(successCallback, errorCallback){
 
 // signOut function
 function signOut(successCallback, errorCallback){
-    window.gapi.getAuthInstance().signOut().then(function(){
+    window.gapi.auth2.getAuthInstance().signOut().then(function(){
         successCallback()
     }, function(error){
         errorCallback(error)
@@ -70,10 +71,10 @@ function signOut(successCallback, errorCallback){
 
 // printInfo
 // https://developers.google.com/identity/sign-in/web/people
-function printInfo(googleUser){
-    if (window.gapi.getAuthInstance().isSignedIn.get()){
+function printInfo(){
+    if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
         // Ok, you signed in
-        let profile = window.gapi.getAuthInstance().currentUser.get().getBasicProfile();
+        let profile = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
         console.log("ID:"+profile.getID() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl())
     } else {
         console.log("Yes, you haven't logged in yet!")
