@@ -73,8 +73,12 @@ function signOut(successCallback, errorCallback){
 // https://developers.google.com/identity/sign-in/web/people
 function printInfo(){
     if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
+        console.log(window.gapi.auth2);
         // Ok, you signed in
-        let profile = window.gapi.auth2.currentUser.get().getBasicProfile();
+        let googleUser = window.gapi.auth2.currentUser.get();
+        console.log(googleUser);
+        let profile = googleUser.getBasicProfile();
+        console.log(profile);
         console.log("ID:"+profile.getID() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl())
     } else {
         console.log("Yes, you haven't logged in yet!")
