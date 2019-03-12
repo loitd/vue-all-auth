@@ -74,7 +74,7 @@ function signOut(successCallback, errorCallback){
 function printInfo(){
     if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
         // Ok, you signed in
-        let profile = window.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        let profile = window.gapi.auth2.currentUser.get().getBasicProfile();
         console.log("ID:"+profile.getID() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl())
     } else {
         console.log("Yes, you haven't logged in yet!")
