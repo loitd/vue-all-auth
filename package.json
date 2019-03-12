@@ -4,7 +4,7 @@
   "description": "Vue all social authentication plugin help you add social sign in, sign out easy",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest -c jest.config.js",
     "dep": "git add * && git commit -m 'minor-fixes' && git push origin master && npm publish"
   },
   "repository": {
@@ -27,5 +27,15 @@
   "bugs": {
     "url": "https://github.com/loitd/vue-all-auth/issues"
   },
-  "homepage": "https://github.com/loitd/vue-all-auth#readme"
+  "homepage": "https://github.com/loitd/vue-all-auth#readme",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^24.4.0",
+    "jest": "^24.4.0",
+    "vue": "^2.6.8",
+    "vue-jest": "^3.0.4"
+  },
+  "dependencies": {}
 }

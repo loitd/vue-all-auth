@@ -28,6 +28,29 @@ function initClient(config){
     });
 }
 
+function init(){
+    return new Promise(function(resolve, reject){
+        if (window.gapi === undefined){
+            // windows.gapi is not init
+            console.log("gapi is not installed yet! Now install");
+            installClient().then(function(){
+                // Installed, now init
+                return initClient(options)
+            }).then(function(){
+                // Installed and inited -> resolved
+                resolve()
+            })
+        } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
+            // window.gapi is installed but auth2 is not init yet
+            console.log("gapi installed but is not init yet! Now init!")
+            initClient(options).then(function(){
+                // init done. Resolved
+                resolve()
+            })
+        }
+    })
+}
+
 // signIn function
 /* 
     https://developers.google.com/identity/protocols/OAuth2
@@ -75,8 +98,12 @@ function printInfo(){
     if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
         console.log(window.gapi.auth2);
         // Ok, you signed in
-        let googleUser = window.gapi.auth2.currentUser.get();
+        let ins = window.gapi.auth2.getAuthInstance();
+        console.log(ins);
+        //
+        let googleUser = window.gapi.auth2.getAuthInstance().currentUser.get();
         console.log(googleUser);
+        // 
         let profile = googleUser.getBasicProfile();
         console.log(profile);
         console.log("ID:"+profile.getID() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl())
@@ -88,13 +115,13 @@ function printInfo(){
 
 
 // This exports the plugin object.
-export default{
+let vueAllAuth = {
     // https://dev.to/nkoik/writing-a-very-simple-plugin-in-vuejs---example-8g8
     // https://vuejs.org/v2/guide/plugins.html
     // The install method will be called with the Vue constructor as the first argument, along with possible options
     // How to call - Without options Vue.use(yourPlugin)
     // With options Vue.use(yourPlugin, {someOption: true})
-    install (Vue, options){
+    install: function(Vue, options){
         // Add a component or directive to your plugin, so it will be installed globally to your project.
         // Vue.component('ggButton', ggButton)
 
@@ -115,34 +142,15 @@ export default{
         // Add or modify global methods or properties.
         Vue.allAuth = function(){
             return {
-                init: function(){
-                    return new Promise(function(resolve, reject){
-                        if (window.gapi === undefined){
-                            // windows.gapi is not init
-                            console.log("gapi is not installed yet! Now install");
-                            installClient().then(function(){
-                                // Installed, now init
-                                return initClient(options)
-                            }).then(function(){
-                                // Installed and inited -> resolved
-                                resolve()
-                            })
-                        } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
-                            // window.gapi is installed but auth2 is not init yet
-                            console.log("gapi installed but is not init yet! Now init!")
-                            initClient(options).then(function(){
-                                // init done. Resolved
-                                resolve()
-                            })
-                        }
-                    })
-                }, //init function
+                init: init, //init function
                 signIn: signIn,
                 signOut: signOut,
                 printInfo: printInfo,
             }
         }
-        console.log(options);
+        // console.log(options);
 
     }
 }
+
+module.exports = vueAllAuth;
