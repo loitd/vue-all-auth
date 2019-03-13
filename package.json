@@ -1,6 +1,6 @@
 {
   "name": "vue-all-auth",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Vue all social authentication plugin help you add social sign in, sign out easy",
   "main": "index.js",
   "scripts": {

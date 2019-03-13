@@ -1,10 +1,19 @@
+/*
+ * Filename: modules\vue-all-auth\index.js
+ * Path: modules\vue-all-auth
+ * Created Date: Monday, March 11th 2019, 4:04:14 pm
+ * Author: loitd
+ * 
+ * Copyright (c) 2019 LOITD
+ */
+
 // plugin.js
 // import ggButton from 'components/ggButton.vue'
 // With google: based on this example https://github.com/google/google-api-javascript-client/blob/master/samples/authSample.html
 
 function installClient(){
     // Installing client mean append client script to head (and make sure it loaded)
-    console.log("installClient called");
+    // console.log("installClient called");
     return new Promise(function(resolve, reject){
         // do something here
         let ggClientScript = document.createElement("script");
@@ -39,6 +48,8 @@ function init(){
             }).then(function(){
                 // Installed and inited -> resolved
                 resolve()
+                // Just a log
+                console.log("gapi is installed and initialized!")
             })
         } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
             // window.gapi is installed but auth2 is not init yet
@@ -46,6 +57,7 @@ function init(){
             initClient(options).then(function(){
                 // init done. Resolved
                 resolve()
+                console.log("gapi is installed and initialized!")
             })
         }
     })
@@ -96,22 +108,23 @@ function signOut(successCallback, errorCallback){
 // https://developers.google.com/identity/sign-in/web/people
 function printInfo(){
     if (window.gapi.auth2.getAuthInstance().isSignedIn.get()){
-        console.log("This is auth2");
-        console.log(window.gapi.auth2);
+        // All printing should be removed in production.
+        // console.log("This is auth2");
+        // console.log(window.gapi.auth2);
         // Ok, you signed in
-        console.log("This is ins");
+        // console.log("This is ins");
         let ins = window.gapi.auth2.getAuthInstance();
-        console.log(ins);
+        // console.log(ins);
         //yes
-        console.log("This is googleUser");
+        // console.log("This is googleUser");
         let googleUser = window.gapi.auth2.getAuthInstance().currentUser.get();
-        console.log(googleUser);
+        // console.log(googleUser);
         //yes
-        console.log("This is profile");
+        // console.log("This is profile");
         let profile = googleUser.getBasicProfile();
-        console.log(profile);
+        // console.log(profile);
         // 
-        console.log("ID:"+profile.getId() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl()+"FName:"+profile.getFamilyName()+"GName:"+profile.getGivenName())
+        console.log("ID:"+profile.getId() + "FullName:"+profile.getName()+"Email:"+profile.getEmail()+"Img:"+profile.getImageUrl()+"FamilyName:"+profile.getFamilyName()+"GivenName:"+profile.getGivenName())
     } else {
         console.log("Yes, you haven't logged in yet!")
     }
@@ -158,4 +171,5 @@ let vueAllAuth = {
     }
 }
 
+// Easier for testing with older version
 module.exports = vueAllAuth;
