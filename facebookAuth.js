@@ -14,7 +14,8 @@ let facebookAuth = {
         return new Promise(function(resolve, reject){
             // do something here
             let fbClientScript = document.createElement("script")
-            fbClientScript.setAttribute("src", "https://connect.facebook.net/en_US/sdk.js")
+            // fbClientScript.setAttribute("src", "https://connect.facebook.net/en_US/sdk.js")
+            fbClientScript.setAttribute("src", "https://connect.facebook.net/pl_PL/all.js")
             // Not handle connect timeout case yet
             // Append the script onto the head element
             // document.head.appendChild(ggClientScript)
@@ -55,9 +56,36 @@ let facebookAuth = {
             }
         });
     },
-    fbSignIn: function(){
+    fbSignIn: function(successCallback, errorCallback){
         // first check current status of user
-        // If not connected-> do the login
+        // More about promise: https://ehkoo.com/bai-viet/tat-tan-tat-ve-promise-va-async-await
+        // Basics: https://viblo.asia/p/object-trong-javascript-nhung-dieu-can-biet-V3m5W2JWlO7
+        return new Promise(function(resolve, reject){
+            // Async here
+            FB.getLoginStatus(function(response){
+                if (response.status === "connected"){
+                    // connected - Người đó đăng nhập Facebook và đã đăng nhập ứng dụng của bạn.
+                    console.log("Already signed in and connected.")
+                    console.log(response)
+                    // Ngược lại, dùng `resolve()` để trả dữ liệu về cho `.then()`
+                    resolve(response)
+                } else {
+                    // then not_authorized or unknown 
+                    FB.login(function(response){
+                        if (response.status === "connected"){
+                            // connected - Người đó đăng nhập Facebook và đã đăng nhập ứng dụng của bạn.
+                            console.log("Signed in and connected.")
+                            console.log(response)
+                            resolve(response)
+                        } else {
+                            console.log("Something went wrong while logging in"+response.status)
+                            console.log(response)
+                            reject(response)
+                        }    
+                    }, {scope: 'public_profile,email'})
+                }
+            })
+        })
     }
 }
 
